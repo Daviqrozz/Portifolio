@@ -1,0 +1,11 @@
+@import "tailwindcss";
+body{
+    background-color: black;
+}
+
+.background-home{
+    min-height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    background: radial-gradient(circle at 104.9% 51.2%, rgb(104 0 0) 0%, rgb(10 1 1) 15.9%, rgb(165 1 1) 15.9%, rgb(103 0 0) 24.4%, rgb(46 50 50) 24.5%, rgb(0 0 0) 66%);
+}
