@@ -1,3 +1,4 @@
+import { HashLink } from "react-router-hash-link"
 import Button from "../ui/DefaultButton"
 
 export default function Presentation() {
@@ -12,7 +13,7 @@ export default function Presentation() {
                         </h1>
                         <p className="text-lg sm:text-1xl font-sans font-semibold">Sou um entusiasta de tecnologia viciado em aprender coisas novas. Confira mais sobre mim e alguns de meus projetos logo abaixo!</p>
                         <div className="text-2xl sm:text-3x1 mt-5 ">
-                            <a href="/contato"><Button className="h-14 px-8 text-sm flex items-center justify-center"><span className="">Fale comigo</span></Button></a>
+                           <HashLink smooth to="/contato"> <Button className="h-14 px-8 text-sm flex items-center justify-center"><span className="">Fale comigo</span></Button></HashLink>
                         </div>
                     </div>
                 </div>
