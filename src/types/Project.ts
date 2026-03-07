@@ -5,7 +5,7 @@ export type Project = {
     type: string,
     codeUrl: string,
     appUrl ?: string,   
-    description?: string,
+    description: string,
     techs: {
         name: string
         Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
