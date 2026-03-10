@@ -9,6 +9,8 @@ type FormData = {
   mensagem: string
 }
 
+type FormStatus = "idle" | "sending" | "success" | "error"
+
 export default function ContactForm() {
   const [formData, setFormData] = useState<FormData>({
     nome: "",
@@ -17,17 +19,37 @@ export default function ContactForm() {
     mensagem: "",
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [status, setStatus] = useState<FormStatus>("idle")
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Enviando:", formData)
-   
+    setStatus("sending")
+
+    try {
+      console.log("Enviando:", formData)
+      // aqui entraria seu fetch/axios para API de email ou backend
+
+      // se deu tudo certo:
+      setStatus("success")
+      setFormData({
+        nome: "",
+        email: "",
+        telefone: "",
+        mensagem: "",
+      })
+    } catch (error) {
+      console.error(error)
+      setStatus("error")
+    }
   }
 
   return (
@@ -35,7 +57,6 @@ export default function ContactForm() {
       onSubmit={handleSubmit}
       className="bg-[#050505] rounded-xl p-8 max-w-md w-full space-y-6 mb-10"
     >
-      
       <div>
         <label htmlFor="nome" className="block text-white/80 font-medium mb-2">
           Nome
@@ -52,7 +73,6 @@ export default function ContactForm() {
         />
       </div>
 
-   
       <div>
         <label htmlFor="email" className="block text-white/80 font-medium mb-2">
           Email
@@ -69,9 +89,11 @@ export default function ContactForm() {
         />
       </div>
 
-    
       <div>
-        <label htmlFor="telefone" className="block text-white/80 font-medium mb-2">
+        <label
+          htmlFor="telefone"
+          className="block text-white/80 font-medium mb-2"
+        >
           Telefone
         </label>
         <input
@@ -85,9 +107,11 @@ export default function ContactForm() {
         />
       </div>
 
-     
       <div>
-        <label htmlFor="mensagem" className="block text-white/80 font-medium mb-2">
+        <label
+          htmlFor="mensagem"
+          className="block text-white/80 font-medium mb-2"
+        >
           Mensagem
         </label>
         <textarea
@@ -102,9 +126,11 @@ export default function ContactForm() {
         />
       </div>
 
-   
       <div>
-        <label htmlFor="assunto" className="block text-white/80 font-medium mb-2">
+        <label
+          htmlFor="assunto"
+          className="block text-white/80 font-medium mb-2"
+        >
           Assunto
         </label>
         <select
@@ -123,10 +149,25 @@ export default function ContactForm() {
         </select>
       </div>
 
-   
-      <Button type="submit" className="w-full">
-        Enviar
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={status === "sending"}
+      >
+        {status === "sending" ? "Enviando..." : "Enviar"}
       </Button>
+
+      {status === "success" && (
+        <p className="text-green-400 text-sm mt-2">
+          Mensagem enviada com sucesso! Retornarei em breve.
+        </p>
+      )}
+
+      {status === "error" && (
+        <p className="text-red-400 text-sm mt-2">
+          Ocorreu um erro ao enviar. Tente novamente.
+        </p>
+      )}
     </form>
   )
 }
