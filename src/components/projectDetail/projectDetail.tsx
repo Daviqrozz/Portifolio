@@ -1,23 +1,28 @@
 import { useParams, Link } from "react-router-dom"
-import { projects } from "../../data/projects"
 import { ArrowLeft, Github, Globe } from "lucide-react"
 import { HashLink } from "react-router-hash-link"
+import { techIcons } from "../../data/techIcons"
+import { useProject } from "../../hooks/useProject"
 
 export default function ProjectDetail() {
-    const { id } = useParams<{ id: string }>()
-    const project = projects.find(p => p.id === Number(id))
+    const { slug } = useParams<{ slug: string }>()
+    const { project, loading, error } = useProject(slug) // ← novo
 
-    if (!project) {
-        return (
-            <main className="min-h-screen bg-black pt-24 px-6">
-                <div className="max-w-4xl mx-auto">
-                    <p className="text-2xl text-white/70 text-center">
-                        Projeto não encontrado
-                    </p>
-                </div>
-            </main>
-        )
-    }
+    if (loading) return (
+        <main className="min-h-screen bg-black pt-24 px-6">
+            <div className="max-w-4xl mx-auto">
+                <p className="text-2xl text-white/70 text-center">Carregando...</p>
+            </div>
+        </main>
+    )
+
+    if (error || !project) return (
+        <main className="min-h-screen bg-black pt-24 px-6">
+            <div className="max-w-4xl mx-auto">
+                <p className="text-2xl text-white/70 text-center">Projeto não encontrado</p>
+            </div>
+        </main>
+    )
 
     return (
         <main className="min-h-screen bg-black pt-24 px-6">
@@ -36,7 +41,7 @@ export default function ProjectDetail() {
                     <div className="order-2 lg:order-1 space-y-6">
                         <div className="bg-[#0f0f0f] rounded-xl p-4">
                             <img
-                                src={project.img}
+                                src={project.thumbnail_url}
                                 alt={project.title}
                                 className="w-full h-64 md:h-80 rounded-lg"
                             />
@@ -47,26 +52,38 @@ export default function ProjectDetail() {
                                 Tecnologias utilizadas
                             </h3>
                             <div className="flex flex-wrap gap-3">
-                                {project.techs.map(tech => (
-                                    <span
-                                        key={tech.name}
-                                        className="inline-flex items-center gap-2 px-3 py-1 bg-[#1a1a1a] rounded-full"
-                                    >
-                                        <tech.Icon className="w-4 h-4 text-[#f9004d]" />
-                                        <span className="text-sm text-white/80">{tech.name}</span>
-                                    </span>
-                                ))}
+                                {project.tech_stack.map(tech => {
+                                    const Icon = techIcons[tech]
+                                    return (
+                                        <span
+                                            key={tech}
+                                            className="inline-flex items-center gap-2 px-3 py-1 bg-[#1a1a1a] rounded-full"
+                                        >
+                                            {Icon
+                                                ? <Icon className="w-4 h-4 text-[#f9004d]" />
+                                                : <span className="w-4 h-4" />
+                                            }
+                                            <span className="text-sm text-white/80">{tech}</span>
+                                        </span>
+                                    )
+                                })}
                             </div>
                         </div>
                     </div>
 
-                    {/* Coluna direita: texto + botões */}
                     <div className="order-1 lg:order-2">
                         <div className="sticky top-24">
                             <div className="flex items-center gap-4 mb-6">
-                                <span className="px-4 py-1 bg-[#f9004d]/20 text-[#f9004d] text-sm font-medium rounded-full">
-                                    {project.type}
-                                </span>
+                                <div className="flex flex-wrap gap-2">
+                                    {project.tags.map(tag => (
+                                        <span
+                                            key={tag}
+                                            className="px-4 py-1 bg-[#f9004d]/20 text-[#f9004d] text-sm font-medium rounded-full"
+                                        >
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
 
                             <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
@@ -77,11 +94,10 @@ export default function ProjectDetail() {
                                 {project.description}
                             </p>
 
-                            {/* Botões de ação */}
                             <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-                                {/* GitHub */}
+
                                 <a
-                                    href={project.codeUrl}
+                                    href={project.github_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center justify-center gap-3 px-6 py-3 bg-[#1a1a1a] hover:bg-[#f9004d] text-white font-medium rounded-lg transition-all group"
@@ -92,10 +108,10 @@ export default function ProjectDetail() {
                                     <span>Ver código no GitHub</span>
                                 </a>
 
-                                {/* Aplicação / Em desenvolvimento */}
-                                {project.appUrl ? (
+
+                                {project.live_url ? (
                                     <a
-                                        href={project.appUrl}
+                                        href={project.live_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center justify-center gap-3 px-6 py-3 bg-[#f9004d] hover:bg-[#f9004d]/90 text-white font-medium rounded-lg transition-all group"
