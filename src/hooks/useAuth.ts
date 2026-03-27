@@ -1,10 +1,17 @@
-import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { useEffect, useState } from "react"
+import { supabase } from "../lib/supabase"
+import type { Session, User } from "@supabase/supabase-js"
 
-type AuthUser = {
-  id: string
-  email: string | null
-} | null
+type AuthUser =
+  | {
+      id: string
+      email: string | null
+    }
+  | null
+
+type GetUserResponse = {
+  user: User | null
+}
 
 export function useAuth() {
   const [user, setUser] = useState<AuthUser>(null)
@@ -12,9 +19,10 @@ export function useAuth() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
+      const { user } = data as GetUserResponse
       setUser(
-        data.user
-          ? { id: data.user.id, email: data.user.email }
+        user
+          ? { id: user.id, email: user.email ?? null }
           : null
       )
       setLoading(false)
@@ -22,13 +30,15 @@ export function useAuth() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(
-        session?.user
-          ? { id: session.user.id, email: session.user.email }
-          : null
-      )
-    })
+    } = supabase.auth.onAuthStateChange(
+      (_event: string, session: Session | null) => {
+        setUser(
+          session?.user
+            ? { id: session.user.id, email: session.user.email ?? null }
+            : null
+        )
+      }
+    )
 
     return () => {
       subscription.unsubscribe()
