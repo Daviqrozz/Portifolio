@@ -29,7 +29,10 @@ export default function Project() {
         <>
             <section id='projetosSection' className="bg-[#141414] px-6 py-4">
                 <div className='text-white text-center'>
-                    <h2 className='text-4xl font-semibold mx-0 my-0'>Projetos!</h2>
+                    <h2 className='text-4xl font-semibold mx-0 my-0'>Meus <span className='text-[#f9004d]'>Projetos</span></h2>
+                    <p className="text-sm md:text-base text-white/60 max-w-2xl mx-auto">
+                        Alguns de meus principais projetos que desenvolvi aprendendo da melhor forma, na pratica!
+                    </p>
                 </div>
                 <div className="max-w-6xl mx-auto mt-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">

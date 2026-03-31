@@ -1,6 +1,7 @@
 import Home from "./pages/Home"
 import Contato from "./pages/Contact"
 import Header from "./components/header/Header"
+import Footer from "./components/footer/footer"
 
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import ProjectDetailed from "./pages/ProjectDetailed"
@@ -26,12 +27,11 @@ export default function App() {
                         element={
                             <ProtectedRoute>
                                 <AdminDashboard />
-                            </ProtectedRoute>
-                        }
-                        
+                            </ProtectedRoute>}
                     />
+                    
                 </Routes>
-
+                <Footer />
             </BrowserRouter>
 
         </>

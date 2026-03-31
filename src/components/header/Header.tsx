@@ -29,6 +29,7 @@ export default function Header() {
                     <HashLink smooth to="/#presentacaoSection" className="hover:text-[#f9004d] transition-colors">Sobre mim</HashLink>
                     <HashLink smooth to="/#projetosSection" className="hover:text-[#f9004d] transition-colors">Projetos</HashLink>
                     <HashLink smooth to="/contato" className="hover:text-[#f9004d] transition-colors">Contatos</HashLink>
+                    <HashLink smooth to="/#skillsSection" className="hover:text-[#f9004d] transition-colors">Habilidades</HashLink>
                 </nav>
             </div>
 
@@ -66,6 +67,15 @@ export default function Header() {
                     className="text-white font-bold hover:text-[#f9004d] transition-colors"
                 >
                     Contatos
+                </HashLink>
+
+                <HashLink
+                    smooth
+                    to="/#skillsSection"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-white font-bold hover:text-[#f9004d] transition-colors"
+                >
+                    Habilidades
                 </HashLink>
             </nav>
         </header>
